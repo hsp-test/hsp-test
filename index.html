@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>HSP(Highly Sensitive Person) 자가진단 — 27문항</title>
+    <title>나는 얼마나 예민한 사람일까?</title>
 
     <!-- SEO / OG -->
-    <meta name="description" content="HSP(예민한 사람) 27문항 자가 테스트. 예/아니오 체크 후 점수와 해석을 즉시 확인하세요.">
-    <meta property="og:title" content="HSP 27문항 자가진단 테스트">
-    <meta property="og:description" content="예/아니오 체크 → 자동 채점 → 결과 해석">
+    <meta name="description" content="HSP 자가진단 테스트. 예/아니오 체크 후 점수를 확인하세요.">
+    <meta property="og:title" content="나는 얼마나 예민한 사람일까?">
+    <meta property="og:description" content="27문항에 답변하시면 결과가 나옵니다.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://hsp-test.github.io/hsp-test/">
     <meta property="og:image" content="https://hsp-test.github.io/hsp-test/og-hsp.png">
@@ -219,8 +219,8 @@
           Kakao.Share.sendDefault({
             objectType: 'feed',
             content: {
-              title: 'HSP 27문항 자가 테스트',
-              description: '예/아니오 체크 → 자동 채점 → 결과 해석',
+              title: '나는 얼마나 예민한 사람일까?',
+              description: 'HSP(Highly Sensitive Person) 자가진단 - 27문항',
               imageUrl: 'https://USERNAME.github.io/hsp-test/og-hsp.png',
               link: { mobileWebUrl: location.href, webUrl: location.href }
             },
@@ -368,13 +368,13 @@
             let band="", badgeClass="ok", text="";
             if (score >= 14){ 
                 band=" HSP 성향 강함 "; badgeClass="err";
-                text = "민감성이 강하게 나타날 가능성이 높습니다. 자극 관리, 회복 루틴, 환경 조절이 특히 중요합니다.";
+                text = "예민함이 강하게 나타나는 기질을 갖고 있습니다. 자극 관리, 회복 루틴, 환경 조절이 특히 중요합니다.";
             } else if (score >= 10){ 
                 band=" 중간 정도 "; badgeClass="warn";
-                text = "상황에 따라 민감성이 두드러질 수 있습니다. 일상에서 자극/휴식 균형을 점검하세요.";
+                text = "상황에 따라 예민함이 두드러질 수 있습니다. 일상에서 자극/휴식 균형을 점검하세요.";
             } else { 
                 band=" HSP 성향 낮음 "; badgeClass="ok";
-                text = "민감성이 뚜렷하지 않을 수 있습니다. 다만 특정 상황에서 부분적으로 나타날 수 있습니다.";
+                text = "예민함이 뚜렷하게 나타나지 않습니다. 다만 특정 상황에서는 일부 나타날 수 있습니다.";
             }
 
             interp.innerHTML = `<span class="badge ${badgeClass}">${band}</span>`;
@@ -498,8 +498,8 @@
           Kakao.Share.sendDefault({
             objectType: 'feed',
             content: {
-              title: 'HSP 27문항 자가 테스트',
-              description: '예/아니오 체크 → 자동 채점 → 결과 해석',
+              title: '나는 얼마나 예민한 사람일까?',
+              description: 'HSP(Highly Sensitive Person) 자가진단 - 27문항',
               imageUrl: 'https://hsp-test.github.io/hsp-test/og-hsp.png',
               link: { mobileWebUrl: 'https://hsp-test.github.io/hsp-test/', webUrl: 'https://hsp-test.github.io/hsp-test/' }
             },
