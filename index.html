@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>나는 얼마나 예민한 사람일까?</title>
+
+  <!-- SEO / OG (정적: 기본 한국어) -->
+  <meta name="description" content="HSP 자가진단 테스트. 예/아니오 체크 후 점수를 확인하세요.">
+  <meta property="og:title" content="나는 얼마나 예민한 사람일까?">
+  <meta property="og:description" content="27문항에 답변하시면 결과가 나옵니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hsp-test.github.io/hsp-test/">
+  <meta property="og:image" content="https://hsp-test.github.io/hsp-test/og-hsp.png">
+  <link rel="icon" href="favicon.ico">
+
+  <style>
+    :root{--bg:#0f172a;--panel:#111827;--muted:#94a3b8;--text:#e5e7eb;--accent:#38bdf8;--accent2:#22c55e;--warn:#f59e0b;--err:#ef4444;--card:#0b1220;--border:#1f2937;}
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Pretendard,Apple SD Gothic Neo,Noto Sans KR,sans-serif}
+    a{color:var(--accent)}
+    .container{max-width:960px;margin:0 auto;padding:24px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid var(--border);border-radius:16px;padding:24px;min-height:400px;display:flex;flex-direction:column}
+    h1{font-size:clamp(22px,3.2vw,32px);margin:0 0 8px}
+    .sub{color:var(--muted);margin:0 0 10px}
+    .note{color:var(--muted);font-size:13px;margin:0 0 20px}
+    .langbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 0}
+    .langbtn{border:1px solid var(--border);background:#0a0f1d;color:var(--text);border-radius:999px;padding:6px 10px;font-weight:700;cursor:pointer}
+    .langbtn.active{background:var(--accent);color:#001018;border-color:var(--accent)}
+.muted{color:var(--muted)}
+.langbar-fixed{
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 1000;
+  background: rgba(10, 15, 29, 0.6);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  padding: 6px;
+  border-radius: 999px;
+}
+    .progress{height:10px;border-radius:999px;background:#0a0f1d;border:1px solid var(--border);overflow:hidden}
+    .bar{height:100%;background:linear-gradient(90deg,var(--accent),#60a5fa);width:0%}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    button{cursor:pointer;border:none;border-radius:12px;padding:12px 16px;font-weight:700}
+    .primary{background:var(--accent);color:#001018}
+    .ghost{background:#0a0f1d;border:1px solid var(--border);color:var(--text)}
+    .danger{background:var(--err);color:#fff}
+    .share-row{display:flex;gap:10px;flex-wrap:wrap}
+    .share-btn{background:#0a0f1d;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .share-btn:hover{border-color:var(--accent)}
+    #quizContainer{flex-grow:1;position:relative}
+    .item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin:0;min-width:0;position:absolute;top:0;left:0;right:0;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;flex-direction:column;height:100%}
+    .item.active{opacity:1;pointer-events:auto;position:relative}
+    .qhead{display:flex;gap:15px;align-items:flex-start;margin-bottom:25px}
+    .qnum{flex:0 0 auto;background:var(--accent);color:#001018;font-weight:700;border-radius:12px;padding:6px 12px;font-size:1.2em}
+    .qtxt{line-height:1.7;font-weight:600;font-size:1.2em;flex-grow:1}
+    .opts{margin-top:20px;display:flex;gap:15px;justify-content:center}
+    .ans-btn{cursor:pointer;border:2px solid var(--border);border-radius:14px;padding:15px 25px;font-weight:700;font-size:1.1em;background:#0a0f1d;color:var(--text);transition:all .2s;flex-basis:45%}
+    .ans-btn:hover{border-color:var(--accent);background:rgba(56,189,248,.1)}
+    .ans-btn.selected-1{background:var(--accent2);color:#000;border-color:var(--accent2)}
+    .ans-btn.selected-0{background:var(--err);color:#fff;border-color:var(--err)}
+    .nav-actions{display:flex;justify-content:space-between;margin-top:20px}
+    .nav-actions button{padding:10px 18px}
+    .result{margin-top:22px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:3.5rem 2.5rem;flex-direction:column;align-items:center;text-align:center;display:none}
+    .result h3{font-size:2.2em;margin:0 0 15px;font-weight:900}
+    #interp{font-size:1.6em;line-height:1.6;margin:0 0 16px}
+    #scoreLine{font-size:1.3em;margin:0 0 12px;line-height:1.5}
+    .pill{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:6px 10px;margin:4px 6px 0 0;background:#0a0f1d}
+    .badge{display:inline-block;border-radius:10px;padding:4px 8px;font-weight:700}
+    .ok{background:var(--accent2);color:#06240f}
+    .warn{background:var(--warn);color:#2b1d00}
+    .err{background:var(--err);color:#fff}
+    #btnBlog{background:#1DDB16;color:#fff;border:none;padding:12px 20px;font-size:1.05em;font-weight:700;border-radius:12px;cursor:pointer;margin-top:16px}
+    #btnBlog:hover{opacity:.9}
+    .req{outline:2px solid var(--err);outline-offset:2px}
+    @media(max-width:600px){.container{padding:16px}.ans-btn{flex-basis:100%}.opts{flex-direction:column}.result h3{font-size:1.8em}#scoreLine{font-size:1.1em}#interp{font-size:1.2em}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="card" role="banner" aria-label="HSP 자가진단 소개">
+      <h1 id="title">나는 얼마나 예민한 사람일까?</h1>
+      <h2 id="subtitle">HSP(Highly Sensitive Person) 자가진단 - 27문항</h2>
+      <p class="sub" id="subdesc">엘레인 아론의 HSP 관련 문헌을 바탕으로 한 자가TEST입니다.</p>
+      <p class="note" id="note">(자가 점검용으로, <b>공식 임상 진단이 아닙니다</b>.)</p>
+
+      <!-- 언어 전환 -->
+<div class="langbar langbar-fixed" aria-label="language switch">
+  <button class="langbtn active" id="btnKo">🇰🇷 한국어</button>
+  <button class="langbtn" id="btnEn">🇺🇸 English</button>
+</div>
+
+      <div aria-label="설문 진행도" class="progress" title="progress">
+        <div class="bar" id="progBar"></div>
+      </div>
+      <p class="sub" id="progText">0 / 27 문항 응답</p>
+
+      <div class="actions">
+        <button class="danger" id="btnReset" aria-label="reset">응답 초기화</button>
+        <div class="share-row">
+          <button class="share-btn" id="btnCopy">링크 복사</button>
+          <button class="share-btn" id="btnKakao">카카오톡 공유</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="card" role="main" aria-labelledby="formTitle">
+      <h2 id="formTitle" class="sr-only">HSP 27문항 설문</h2>
+
+      <section class="result" id="result" aria-live="polite" aria-atomic="true">
+        <h3 id="resultTitle">결과</h3>
+        <p id="interp"></p>
+        <p id="scoreLine"></p>
+        <div id="tags" class="muted"></div>
+
+        <div class="result-buttons">
+          <button id="btnBlog">너무 예민한 사람들을 위한 공간. Blog 방문하기</button>
+        </div>
+
+        <div class="footer">
+          <p id="refNote" class="muted">
+            References: Aron, E. N. (1996). <i>The Highly Sensitive Person</i>; Aron, Aron &amp; Jagiellowicz (2010), <i>PSPR</i>.
+          </p>
+        </div>
+      </section>
+
+      <div id="quizContainer"></div>
+
+      <div class="nav-actions" id="navActions">
+        <button class="ghost" id="btnPrev" style="visibility:hidden">이전</button>
+        <button class="primary" id="btnNext">다음</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KTZ7J2MJEN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); gtag('config', 'G-KTZ7J2MJEN');
+    function trackHspScore(score){ gtag('event','hsp_score_submit',{score:score, lang: (localStorage.getItem('hsp_lang')||'ko')}); }
+  </script>
+
+  <!-- Kakao SDK -->
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" crossorigin="anonymous"></script>
+  <script> Kakao.init("2b08a56fe8623755bf5a0b373225221e"); </script>
+
+  <script>
+    // =======================
+    // i18n 사전
+    // =======================
+    const I18N = {
+      ko: {
+        ui: {
+          title: "나는 얼마나 예민한 사람일까?",
+          subtitle: "HSP(Highly Sensitive Person) 자가진단 - 27문항",
+          subdesc: "엘레인 아론의 HSP 관련 문헌을 바탕으로 한 자가TEST입니다.",
+          note: "(자가 점검용으로, <b>공식 임상 진단이 아닙니다</b>.)",
+          result: "결과",
+          prev: "이전",
+          next: "다음",
+          seeResult: "결과 확인",
+          reset: "응답 초기화",
+          copy: "링크 복사",
+          shareKakao: "카카오톡 공유",
+          blogBtn: "너무 예민한 사람들을 위한 공간. Blog 방문하기",
+          progress: (a,t)=>`${a} / ${t} 문항 응답`,
+          qnum: (i,t)=>`${i} / ${t}`,
+          yes: "예 (Yes)", no: "아니오 (No)",
+          scoreLine: (s,t)=>`당신의 점수는 ${s}점 / ${t}점 입니다.`,
+          bandHigh: " HSP 성향 강함 ", bandMid: " 중간 정도 ", bandLow: " HSP 성향 낮음 ",
+          interpHigh: "민감성이 강하게 나타날 가능성이 높습니다. 자극 관리, 회복 루틴, 환경 조절이 특히 중요합니다.",
+          interpMid: "상황에 따라 민감성이 두드러질 수 있습니다. 일상에서 자극/휴식 균형을 점검하세요.",
+          interpLow: "민감성이 뚜렷하지 않을 수 있습니다. 다만 특정 상황에서 부분적으로 나타날 수 있습니다.",
+          references: `References: Aron, E. N. (1996). <i>The Highly Sensitive Person</i>; Aron, Aron &amp; Jagiellowicz (2010), <i>PSPR</i>.`,
+          tags: ['#HSP','#예민한사람','#예민하다','#HSP테스트','#민감성테스트','#자기이해']
+        },
+        questions: [
+          "강한 자극(밝은 빛, 강한 냄새, 거친 옷감, 큰 소리 등)에 쉽게 압도된다.",
+          "짧은 시간에 많은 일을 처리해야 하면 불편하거나 스트레스를 느낀다.",
+          "카페인 같은 자극 물질에 민감하다.",
+          "밝은 빛, 강한 냄새, 거친 옷감, 큰 소리 등이 신경을 거슬리게 한다.",
+          "바쁜 날에는 침대나 어두운 방처럼 자극을 줄일 수 있는 공간이 필요하다.",
+          "타인의 기분이나 감정에 쉽게 영향을 받는다.",
+          "예술이나 음악, 자연에서 깊은 감동을 경험한다.",
+          "시끄럽고 혼잡한 환경에서 쉽게 피로해진다.",
+          "놀라움(갑작스러운 소리, 예기치 않은 사건)에 과도하게 반응한다.",
+          "풍부하고 복잡한 내적 세계(상상, 꿈, 사고)를 가지고 있다.",
+          "사소한 디테일이나 변화를 잘 알아차린다.",
+          "아이나 동물, 타인의 고통에 강하게 공감한다.",
+          "생활이나 일정이 갑작스럽게 변하면 스트레스를 크게 받는다.",
+          "실수, 비판, 잔소리에 쉽게 위축된다.",
+          "경쟁이나 관찰을 받는 상황에서는 능력을 충분히 발휘하지 못할 때가 많다.",
+          "폭력적이거나 잔인한 장면(영화, 뉴스 등)이 오래 마음에 남는다.",
+          "의무나 해야 할 일이 쌓이면 쉽게 압도된다.",
+          "사회적 상황에서의 긴장이나 갈등이 오래 마음에 남는다.",
+          "큰 성과를 내더라도 부담감 때문에 기쁨이 오래 가지 않는다.",
+          "식습관, 수면 부족, 과도한 자극이 기분과 몸 상태에 크게 영향을 미친다.",
+          "새로운 환경이나 낯선 장소에 적응하는 데 시간이 필요하다.",
+          "어린 시절 “너무 예민하다”는 말을 자주 들었다.",
+          "타인의 기대나 요구를 잘 의식하고 민감하게 반응한다.",
+          "깊은 사색이나 자기 성찰을 자주 한다.",
+          "감정의 기복이 큰 편이다.",
+          "조용하고 평화로운 환경에서 더 잘 기능한다.",
+          "다른 사람들은 대수롭지 않게 여기는 자극에도 신체적·정신적으로 큰 반응을 한다."
+        ]
+      },
+      en: {
+        ui: {
+          title: "How sensitive am I?",
+          subtitle: "HSP (Highly Sensitive Person) Self-Test — 27 Items",
+          subdesc: "A self-assessment based on Elaine N. Aron's HSP literature.",
+          note: "(For self-reflection only; <b>not a clinical diagnosis</b>.)",
+          result: "Result",
+          prev: "Previous",
+          next: "Next",
+          seeResult: "See result",
+          reset: "Reset answers",
+          copy: "Copy link",
+          shareKakao: "Share to KakaoTalk",
+          blogBtn: "A space for highly sensitive people — Visit Blog",
+          progress: (a,t)=>`${a} / ${t} answered`,
+          qnum: (i,t)=>`${i} / ${t}`,
+          yes: "Yes", no: "No",
+          scoreLine: (s,t)=>`Your score is ${s} / ${t}.`,
+          bandHigh: " Strong HSP tendency ", bandMid: " Moderate ", bandLow: " Low HSP tendency ",
+          interpHigh: "Your sensitivity is likely strong. Prioritize stimulus management, recovery routines, and environment control.",
+          interpMid: "Sensitivity may stand out depending on the situation. Balance stimulation and rest in daily life.",
+          interpLow: "Sensitivity may not be salient, though it can appear in specific contexts.",
+          references: `References: Aron, E. N. (1996). <i>The Highly Sensitive Person</i>; Aron, Aron &amp; Jagiellowicz (2010), <i>PSPR</i>.`,
+          tags: ['#HSP','#HighlySensitive','#Sensitivity','#HSPtest','#SensoryProcessing','#SelfInsight']
+        },
+        questions: [
+          "I am easily overwhelmed by strong stimuli (bright lights, strong smells, coarse fabrics, loud noises).",
+          "I feel uncomfortable or stressed when I must do a lot in a short time.",
+          "I am sensitive to stimulants like caffeine.",
+          "Bright lights, strong smells, coarse fabrics, or loud noises easily bother me.",
+          "On busy days, I need a place to retreat (bed, dark room) to reduce stimulation.",
+          "I am easily affected by other people's moods or emotions.",
+          "I feel deep emotions when engaged with art, music, or nature.",
+          "I tire easily in noisy and crowded environments.",
+          "I startle or react strongly to sudden noises or unexpected events.",
+          "I have a rich, complex inner life (imagination, dreams, thoughts).",
+          "I notice subtle details and small changes.",
+          "I strongly empathize with the pain of children, animals, or others.",
+          "Sudden changes in plans or routines stress me out.",
+          "I am easily discouraged by mistakes, criticism, or nagging.",
+          "I may underperform when being observed or in competitive situations.",
+          "Violent or cruel scenes (in films, news, etc.) linger with me.",
+          "I feel overwhelmed when tasks and obligations pile up.",
+          "Social tension or conflict lingers with me for a long time.",
+          "Even after big achievements, pressure keeps me from enjoying it for long.",
+          "Diet, lack of sleep, or overstimulation strongly affect my mood and body.",
+          "I need time to adapt to new environments or unfamiliar places.",
+          "As a child, I was often told I was “too sensitive.”",
+          "I am highly aware of others’ expectations and react sensitively.",
+          "I often engage in deep reflection and introspection.",
+          "My emotions fluctuate significantly.",
+          "I function better in quiet and peaceful environments.",
+          "I respond strongly—physically or mentally—to stimuli others find trivial."
+        ]
+      }
+    };
+
+    // =======================
+    // 상태 및 저장 키
+    // =======================
+    let currentLang = localStorage.getItem('hsp_lang') || 'ko';
+    let currentQuestionIndex = 1;
+    const STORE_BASE = 'hsp27_answers_v9_'; // 언어별 분리
+    let answers = loadAnswers();
+
+    // DOM
+    const titleEl = document.getElementById('title');
+    const subtitleEl = document.getElementById('subtitle');
+    const subdescEl = document.getElementById('subdesc');
+    const noteEl = document.getElementById('note');
+    const resultTitle = document.getElementById('resultTitle');
+    const progBar = document.getElementById('progBar');
+    const progText = document.getElementById('progText');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnReset = document.getElementById('btnReset');
+    const btnCopy = document.getElementById('btnCopy');
+    const btnKakao = document.getElementById('btnKakao');
+    const btnBlog = document.getElementById('btnBlog');
+    const btnKo = document.getElementById('btnKo');
+    const btnEn = document.getElementById('btnEn');
+
+    const quizContainer = document.getElementById('quizContainer');
+    const navActions = document.getElementById('navActions');
+    const resultBox = document.getElementById('result');
+    const interp = document.getElementById('interp');
+    const scoreLine = document.getElementById('scoreLine');
+    const tags = document.getElementById('tags');
+    const refNote = document.getElementById('refNote');
+
+    // =======================
+    // 유틸
+    // =======================
+    function t(){ return I18N[currentLang].ui; }
+    function Q(){ return I18N[currentLang].questions; }
+    function storeKey(){ return STORE_BASE + currentLang; }
+
+    function saveAnswers(){
+      try{ localStorage.setItem(storeKey(), JSON.stringify(answers)); }catch(e){}
+    }
+    function loadAnswers(){
+      try{ const raw = localStorage.getItem(storeKey()); return raw?JSON.parse(raw):{}; }catch(e){ return {}; }
+    }
+    function getAnsweredCount(){ return Object.keys(answers).length; }
+
+    // =======================
+    // UI 빌드/업데이트
+    // =======================
+    function applyTexts(){
+      document.documentElement.lang = currentLang === 'ko' ? 'ko' : 'en';
+      titleEl.textContent = t().title;
+      subtitleEl.textContent = t().subtitle;
+      subdescEl.textContent = t().subdesc;
+      noteEl.innerHTML = t().note;
+      resultTitle.textContent = t().result;
+
+      // 버튼 라벨
+      btnPrev.textContent = t().prev;
+      btnNext.textContent = t().next;
+      btnReset.textContent = t().reset;
+      btnCopy.textContent = t().copy;
+      btnKakao.textContent = t().shareKakao;
+      btnBlog.textContent = t().blogBtn;
+
+      // 언어 버튼 상태
+      btnKo.classList.toggle('active', currentLang==='ko');
+      btnEn.classList.toggle('active', currentLang==='en');
+
+      // 진행도
+      updateProgress();
+    }
+
+    function buildForm(){
+      quizContainer.innerHTML = '';
+      const total = Q().length;
+      Q().forEach((q, i)=>{
+        const idx = i+1;
+        const wrap = document.createElement('div');
+        wrap.className = 'item';
+        wrap.id = `item-${idx}`;
+
+        const head = document.createElement('div'); head.className = 'qhead';
+        const num = document.createElement('div'); num.className = 'qnum'; num.textContent = t().qnum(idx, total);
+        const qtxt = document.createElement('span'); qtxt.className = 'qtxt'; qtxt.textContent = q;
+        head.appendChild(num); head.appendChild(qtxt);
+
+        const opts = document.createElement('div'); opts.className = 'opts';
+        const btnYes = document.createElement('button');
+        btnYes.className = 'ans-btn'; btnYes.textContent = t().yes; btnYes.dataset.value='1';
+        btnYes.addEventListener('click', ()=>handleAnswer(idx,1));
+
+        const btnNo = document.createElement('button');
+        btnNo.className = 'ans-btn'; btnNo.textContent = t().no; btnNo.dataset.value='0';
+        btnNo.addEventListener('click', ()=>handleAnswer(idx,0));
+
+        opts.appendChild(btnYes); opts.appendChild(btnNo);
+        wrap.appendChild(head); wrap.appendChild(opts);
+        quizContainer.appendChild(wrap);
+
+        // 복원
+        const key = `q${idx}`;
+        if (answers[key] !== undefined){
+          const v = answers[key];
+          if (v===1) btnYes.classList.add('selected-1');
+          if (v===0) btnNo.classList.add('selected-0');
+        }
+      });
+      goToQuestion(1);
+    }
+
+    function updateNavigation(){
+      btnPrev.style.visibility = (currentQuestionIndex>1) ? 'visible' : 'hidden';
+      if (currentQuestionIndex < Q().length){
+        btnNext.textContent = t().next;
+        btnNext.classList.remove('primary'); btnNext.classList.add('ghost');
+      }else{
+        btnNext.textContent = t().seeResult;
+        btnNext.classList.remove('ghost'); btnNext.classList.add('primary');
+      }
+    }
+    function updateProgress(){
+      const a = getAnsweredCount(); const total = Q().length;
+      const pct = Math.round((a/total)*100);
+      progBar.style.width = pct + '%';
+      progText.textContent = t().progress(a,total);
+    }
+
+    // =======================
+    // 동작
+    // =======================
+    function goToQuestion(index){
+      if(index<1 || index>Q().length) return;
+      resultBox.style.display='none'; quizContainer.style.display='block'; navActions.style.display='flex';
+      const prev = document.getElementById(`item-${currentQuestionIndex}`); if(prev) prev.classList.remove('active');
+      currentQuestionIndex = index;
+      const cur = document.getElementById(`item-${currentQuestionIndex}`); if(cur) cur.classList.add('active');
+      updateNavigation();
+    }
+
+    function handleAnswer(n,v){
+      answers[`q${n}`]=v; saveAnswers(); updateProgress();
+      const cur = document.getElementById(`item-${n}`);
+      if(cur){
+        cur.querySelectorAll('.ans-btn').forEach(btn=>{
+          btn.classList.remove('selected-1','selected-0');
+          if(Number(btn.dataset.value)===v) btn.classList.add(`selected-${v}`);
+        });
+      }
+      if(n<Q().length) goToQuestion(n+1);
+    }
+
+    function calculate(){
+      const total = Q().length;
+      if(getAnsweredCount()!==total){
+        alert(currentLang==='ko' ? "아직 답변하지 않은 문항이 있습니다!" : "Some items are unanswered!");
+        for(let i=1;i<=total;i++){
+          if(answers[`q${i}`]===undefined){ goToQuestion(i); const tEl=document.getElementById(`item-${i}`); if(tEl) tEl.classList.add('req'); return; }
+        }
+        return;
+      }
+      let score=0; for(let i=1;i<=total;i++) score += answers[`q${i}`];
+
+      let bandClass='ok', bandTxt='', interpTxt='';
+      if(score>=14){ bandClass='err'; bandTxt=t().bandHigh; interpTxt=t().interpHigh; }
+      else if(score>=10){ bandClass='warn'; bandTxt=t().bandMid; interpTxt=t().interpMid; }
+      else { bandClass='ok'; bandTxt=t().bandLow; interpTxt=t().interpLow; }
+
+      interp.innerHTML = `<span class="badge ${bandClass}">${bandTxt}</span>`;
+      scoreLine.textContent = t().scoreLine(score,total);
+
+      // 태그(Bilingual: 기본은 해당 언어 태그 + HSP/예민키워드 고정 세트)
+      const tagSet = (currentLang==='ko')
+        ? ['#HSP','#예민한사람','#예민하다',...t().tags]
+        : ['#HSP','#예민한사람','#예민하다',...t().tags];
+      tags.innerHTML = tagSet.map(x=>`<span class="pill">${x}</span>`).join("");
+
+      // 해석 문단(기존 있으면 제거 후 추가)
+      const ex=document.getElementById('finalInterp'); if(ex) ex.remove();
+      scoreLine.insertAdjacentHTML('afterend', `<p id="finalInterp" style="font-size:1.1em;line-height:1.6;margin:8px 0 0">${interpTxt}</p>`);
+
+      refNote.innerHTML = t().references;
+
+      resultBox.style.display='flex'; quizContainer.style.display='none'; navActions.style.display='none';
+      document.querySelector('.container').scrollIntoView({behavior:"smooth",block:"start"});
+
+      try{ trackHspScore(score); }catch(e){}
+    }
+
+    function resetAnswers(){
+      if(!confirm(currentLang==='ko' ? "응답을 모두 지우시겠어요?" : "Clear all answers?")) return;
+      answers = {}; saveAnswers(); updateProgress();
+      resultBox.style.display='none'; quizContainer.style.display='block'; navActions.style.display='flex';
+      const ex=document.getElementById('finalInterp'); if(ex) ex.remove();
+      quizContainer.querySelectorAll('.item').forEach(it=>{
+        it.classList.remove('active','req');
+        it.querySelectorAll('.ans-btn').forEach(b=>b.classList.remove('selected-1','selected-0'));
+      });
+      goToQuestion(1); window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function setLang(lang){
+      if(lang===currentLang) return;
+      currentLang = lang;
+      localStorage.setItem('hsp_lang', currentLang);
+      // 언어 바꾸면 그 언어 저장소에서 응답 복원
+window.scrollTo({top:0, behavior:'smooth'});
+      answers = loadAnswers();
+      applyTexts();
+      buildForm();
+      resultBox.style.display='none'; // 전환 시 결과 숨김
+    }
+
+    // =======================
+    // 이벤트
+    // =======================
+    document.getElementById('btnPrev').addEventListener('click', ()=>{ if(currentQuestionIndex>1) goToQuestion(currentQuestionIndex-1); });
+    document.getElementById('btnNext').addEventListener('click', ()=>{ if(currentQuestionIndex<Q().length) goToQuestion(currentQuestionIndex+1); else calculate(); });
+    document.getElementById('btnReset').addEventListener('click', resetAnswers);
+    document.getElementById('btnBlog').addEventListener('click', ()=>{ window.open('https://blog.naver.com/forhsp-', '_blank'); });
+btnKo.addEventListener('click', () => setLang('ko'));
+btnEn.addEventListener('click', () => setLang('en'));
+
+    // 공유(링크 복사/카카오)
+    document.getElementById('btnCopy').addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(location.href); alert(currentLang==='ko'?'페이지 링크가 복사되었습니다.':'Link copied!'); }
+      catch(e){ alert(currentLang==='ko'?'복사 실패. 주소창 링크를 직접 복사해주세요.':'Copy failed. Please copy from the address bar.'); }
+    });
+    document.getElementById('btnKakao').addEventListener('click', ()=>{
+      Kakao.Share.sendDefault({
+        objectType:'feed',
+        content:{
+          title: currentLang==='ko' ? '나는 얼마나 예민한 사람일까?' : 'How sensitive am I?',
+          description: currentLang==='ko' ? 'HSP(Highly Sensitive Person) 자가진단 - 27문항' : 'HSP (Highly Sensitive Person) Self-Test — 27 Items',
+          imageUrl:'https://hsp-test.github.io/hsp-test/og-hsp.png',
+          link:{ mobileWebUrl: location.href, webUrl: location.href }
+        },
+        buttons:[{ title: currentLang==='ko'?'바로 테스트':'Start Test', link:{ mobileWebUrl: location.href, webUrl: location.href } }]
+      });
+    });
+
+    // 초기 구동
+    applyTexts();
+    buildForm();
+  </script>
+</body>
+</html>
